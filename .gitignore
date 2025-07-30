@@ -1,0 +1,7 @@
+# Ignore all large raw data files
+/Data/
+*.zip
+*.csv
+citibike_env/
+*.ipynb_checkpoints/
+__pycache__/
