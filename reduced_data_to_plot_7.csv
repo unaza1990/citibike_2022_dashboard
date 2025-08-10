@@ -1,0 +1,27 @@
+date,bike_rides_daily,avgTemp,start_station_name,season
+2022-01-18,10,35.2,Amsterdam Ave & W 119 St,Winter
+2022-02-01,9,28.899999999999995,Central Park North & Adam Clayton Powell Blvd,Winter
+2022-02-05,11,27.0,21 St & 43 Ave,Winter
+2022-02-20,13,27.300000000000004,5 Ave & E 135 St,Winter
+2022-02-24,16,34.0,1 Ave & E 18 St,Winter
+2022-03-06,14,49.3,5 Ave & E 103 St,Spring
+2022-03-31,16,49.8,2 Ave & E 29 St,Spring
+2022-05-04,31,53.6,W 21 St & 6 Ave,Spring
+2022-05-15,34,65.8,1 Ave & E 110 St,Spring
+2022-05-23,29,69.8,30 Ave & 47 St,Spring
+2022-05-24,35,63.3,10 St & 7 Ave,Spring
+2022-05-30,25,73.9,W 95 St & Broadway,Spring
+2022-06-04,35,71.4,1 Ave & E 62 St,Summer
+2022-06-16,32,68.5,11 Ave & W 41 St,Summer
+2022-07-05,20,78.6,1 Ave & E 16 St,Summer
+2022-07-23,34,86.5,Ave A & E 14 St,Summer
+2022-07-26,41,78.6,1 Ave & E 6 St,Summer
+2022-09-16,54,67.3,6 Ave & Walker St,Fall
+2022-09-23,27,59.2,1 Ave & E 68 St,Fall
+2022-09-24,40,58.1,W 13 St & 7 Ave,Fall
+2022-10-07,33,68.5,2 Ave & E 72 St,Fall
+2022-10-24,22,57.4,1 Pl & Clinton St,Fall
+2022-10-29,35,51.4,1 Ave & E 6 St,Fall
+2022-10-30,34,54.5,Front St & Jay St,Fall
+2022-11-24,10,46.6,3 Ave & E 100 St,Fall
+2022-11-29,28,41.7,6 Ave & W 33 St,Fall
