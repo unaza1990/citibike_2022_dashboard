@@ -3,32 +3,22 @@
 # ================================
 import os
 from pathlib import Path
-
+from PIL import Image
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
+from pathlib import Path
+from PIL import Image, UnidentifiedImageError
+APP_DIR = Path(__file__).parent
 
 # ---------- Page config & CSS ----------
-st.set_page_config(page_title="Citi Bikes Strategy Dashboard", layout="wide")
+import streamlit as st
 
-st.markdown("""
-<style>
-.block-container { padding-top: 2.6rem; padding-bottom: 3rem; max-width: 1400px; }
-h1, h2, h3 { font-weight: 800; }
-.big-title { font-size: 44px; font-weight: 800; line-height: 1.15; margin: 6px 0 8px 0; }
-.sub-title { font-size: 28px; font-weight: 700; margin: 10px 0 18px 0; }
-.body-lg   { font-size: 18px; line-height: 1.6; }
-.caption   { text-align:center; color:#666; font-size:14px; margin-top:6px; }
-hr { margin: 1.2rem 0; }
-/* NEW: Make iframes (like maps) fill width & height */
-.stApp iframe {
-    width: 100% !important;
-    min-height: 80vh !important;
-    border: none;
-</style>
-""", unsafe_allow_html=True)
+################ Initial settings for the dashboard ################
+st.set_page_config(page_title='Citi Bikes Strategy Dashboard', layout='wide')
+st.title("Citi Bikes Strategy Dashboard")
 
 # ---------- Paths (we’ll auto-find common ones) ----------
 DATA_PATH      = "reduced_data_to_plot_7.csv"
@@ -39,6 +29,7 @@ INTRO_IMG_CANDIDATES = [
     "ghtp-superJumbo.jpg.webp",                  # your download name
     "intro_citibike.webp", "intro_citibike.jpg", "intro_citibike.png"
 ]
+
 RECS_IMG_CANDIDATES = [
     "recs_citibike.jpg", "recs_citibike.png"
 ]
@@ -125,7 +116,7 @@ Use the left **Aspect Selector** to navigate.
         """
     )
     if INTRO_IMG:
-        st.image(INTRO_IMG, use_container_width=True, caption="Citi Bike Image")
+        st.image(INTRO_IMG, width=700, caption="Citi Bike Image")
     else:
         st.info("Add **ghtp-superJumbo.jpg.webp** (or intro_citibike.*) next to app.py — or leave it in Downloads; I’ll find it automatically next run.")
 
@@ -219,33 +210,28 @@ elif page == "Most popular stations":
 # ───────────────  Interactive map with aggregated bike trips  ───────────────
 
 elif page == "Interactive map with aggregated bike trips":
-    page_h1()
-    st.subheader("Interactive map showing aggregated bike trips over New York")
-    st.markdown("### Aggregated Bike Trips in New York")
+    st.write("Interactive map showing aggregated bike trips over New York")
 
-    from pathlib import Path
-    path_to_html = "citibike_trip_routes.html"   # keep this file next to app.py
-
+    path_to_html = "citibike_trip_routes.html"  # make sure this file is in same folder as app.py
     try:
-        with open(path_to_html, "r", encoding="utf-8") as f:
+        with open(path_to_html, 'r') as f:
             html_data = f.read()
 
-        # IMPORTANT: use components.html (not st.iframe)
-        st.components.v1.html(html_data, height=900, scrolling=True)
+        st.header("Aggregated Bike Trips in New York")
+        st.components.v1.html(html_data, height=800)
 
-        # Optional insights
+    except FileNotFoundError:
+        st.error(f"HTML file not found: {path_to_html}")
+        # (Optional) key observations under the map
         st.markdown("### Key Observations:")
         st.markdown(
             """
-            1. **Manhattan core is the densest** (Midtown–Downtown corridors).  
-            2. **Cross-river links** to Brooklyn/Jersey City are visible but thinner.  
-            3. **Hotspots** align with commuter & tourist areas (Central Park, waterfront).  
-            4. **Ops**: larger docks & faster rebalancing needed during peaks.
+            1. **Manhattan core is the densest** (Midtown–Downtown corridors).
+            2. **Cross-river links** between Manhattan–Brooklyn/Jersey City appear but are thinner.
+            3. **Hotspots** align with commuter & tourist areas (Central Park, waterfront).
+            4. **Ops implication:** these corridors need larger docks & faster rebalancing during peaks.
             """
         )
-    except FileNotFoundError:
-        st.error(f"HTML file not found: {Path(path_to_html).resolve()}")
-
 
 # ─────────────────── Duration by weekday & rider (stacked) ───────────────────
 elif page == "Average duration by weekday & rider (stacked)":
@@ -310,34 +296,36 @@ elif page == "Average duration by weekday & rider (stacked)":
     else:
         st.info(f"Place a trip-level CSV named **{TRIPS_CSV_OPT}** next to app.py to enable this page.")
 
-# ───────────────────────────── Recommendations ─────────────────────────────
+# __________________________ Recommendations __________________________
 elif page == "Recommendations":
     page_h1()
     st.subheader("Conclusions and recommendations")
 
-    # Optional hero image (put a file next to app.py, or comment these two lines)
-    RECS_IMG = "recs_citibike.jpg"
-    if Path(RECS_IMG).exists():
-        st.image(RECS_IMG, use_container_width=True, caption="Citi Bike Recommendations")
+    # Import PIL Image at the top of the file if not already
+    # from PIL import Image
+
+    # Optional hero image (must be in the same folder as app.py)
+    RECS_IMG = Image.open("recs_citibike.jpg")
+    st.image(RECS_IMG, width=400, caption="Citi Bike Recommendations")
 
     st.markdown("### Our analysis highlights key factors")
     st.markdown(
         """
-        1. **Seasonal variability** — usage peaks May–Oct; winter is lowest.  
-        2. **High-demand hubs** — a handful of stations dominate volumes.  
-        3. **Uneven regional activity** — outer areas remain under-served.  
-        4. **Connectivity corridors** — waterfront & cross-river spines are persistent flows.  
-        5. **Redistribution gaps** — peaks need faster, data-driven rebalancing.  
+        1. **Seasonal variability** – usage peaks May–Oct; winter is lowest.  
+        2. **High-demand hubs** – a handful of stations dominate volumes.  
+        3. **Uneven regional activity** – outer areas remain under-served.  
+        4. **Connectivity corridors** – waterfront & cross-river spines are persistent flows.  
+        5. **Redistribution gaps** – peaks need faster, data–driven rebalancing.  
         """
     )
 
     st.markdown("### Recommendations")
     st.markdown(
         """
-        - **Seasonal scaling**: ramp inventory May–Oct; scale down Nov–Apr using warm/cold ratio.  
-        - **Expand hubs**: add docks at top 5–8 stations; pilot **dynamic rebalancing windows**.  
-        - **Proactive positioning**: trigger crews off **weather & event alerts**; pre-position before spikes.  
-        - **Grow edges smartly**: seed capacity in **outer areas** near transit & parks.  
-        - **Next data**: add **station capacity + real-time availability** to set SLA windows.  
+        – **Seasonal scaling**: ramp inventory May–Oct; scale down Nov–Apr using warm/cold ratio.  
+        – **Expand hubs**: add docks at top 5–8 stations; pilot **dynamic rebalancing windows**.  
+        – **Proactive positioning**: trigger crews off **weather & event alerts**; pre-position before spikes.  
+        – **Grow edges smartly**: seed capacity in **outer areas** near transit & parks.  
+        – **Next data**: add **station capacity + real-time availability** to set SLA windows.  
         """
     )
