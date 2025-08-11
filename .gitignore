@@ -5,3 +5,7 @@
 citibike_env/
 *.ipynb_checkpoints/
 __pycache__/
+Untitled.ipynb
+kepler_trip_routes_config.json
+recs_citibike.jpg
+*.ipynb_checkpoints/
